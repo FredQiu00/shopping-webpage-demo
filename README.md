@@ -1,2 +1,2 @@
-# sample-react-demo
-Implement a shopping webpage with react, node.js, and MongoDB
+# shopping-webpage-demo
+Implementation of a shopping webpage using React, Node.js, and MongoDB
