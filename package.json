@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "mongodb": "^5.6.0",
+    "react-bootstrap": "^2.7.4"
+  }
+}
