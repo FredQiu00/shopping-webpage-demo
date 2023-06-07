@@ -1,0 +1,15 @@
+/* App.css */
+.App {
+  display: flex;
+  justify-content: space-between;
+  width: 100vw;
+  height: 10vh;
+}
+
+.App > .ProductList {
+  width: 75%;
+}
+
+.App > .cart-display {
+  width: 30%;
+}

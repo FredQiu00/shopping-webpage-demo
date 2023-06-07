@@ -1,0 +1,29 @@
+/* ProductList.css */
+.products-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 250px;
+}
+
+.card {
+  flex-basis: calc(30% - 20px);
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    flex-basis: calc(50% - 20px);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .products-container {
+    margin-right: 0;  /* Reset the margin on smaller screens */
+  }
+}
