@@ -9,7 +9,7 @@ const ProductCard = ({ product }) => {
   return (
     <Card className="card">
       <Card.Body className="container">
-        <Card.Title>{product.name}</Card.Title>
+        <Card.Title>{product.prod_name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">${product.price}</Card.Subtitle>
         <Card.Text>{product.description}</Card.Text>
         <div className="button-container">
