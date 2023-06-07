@@ -4,7 +4,7 @@ const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
 
-const uri = "uri";
+const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
 const databaseName = 'prodList';
 const collectionName = 'prod';
 
@@ -17,7 +17,6 @@ const client = new MongoClient(uri, {
   }
 });
 
-let productsCollection; // MongoDB collection reference
 
 async function connectToDatabase() {
   try {
@@ -32,47 +31,6 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
-// Demo samples
-async function addFieldsToCollection() {
-  try {
-    const collection = client.db(databaseName).collection(collectionName);
-
-    // Create an array of documents with the desired fields
-    const products = [
-      { prod_name: 'Product 1', price: 9.99 },
-      { prod_name: 'Product 2', price: 19.99 },
-      { prod_name: 'Product 3', price: 29.99 },
-    ];
-
-    // Insert the documents into the collection
-    const result = await collection.insertMany(products);
-    console.log('Fields added to the collection:', result.insertedCount);
-  } catch (err) {
-    console.error('Failed to add fields to the collection:', err);
-  }
-}
-
-// addFieldsToCollection();
-
-async function removeAllDataFromCollection() {
-  try {
-
-    const collection = client.db(databaseName).collection(collectionName);
-
-    const result = await collection.deleteMany();
-    console.log('Removed documents:', result.deletedCount);
-  } catch (err) {
-    console.error('Failed to remove data from collection:', err);
-  } finally {
-    await client.close();
-    console.log('Connection closed');
-  }
-}
-
-// removeAllDataFromCollection();
-
-
-
 app.get('/api/products', async (req, res) => {
   try {
     const collection = client.db(databaseName).collection(collectionName);
@@ -84,30 +42,38 @@ app.get('/api/products', async (req, res) => {
 });
 
 app.post('/api/products', async (req, res) => {
+  const { prod_name, price } = req.body;
+  const newProduct = { prod_name, price };
   try {
-    const { prod_name, price } = req.body;
-    const newProduct = { prod_name, price };
     const collection = client.db(databaseName).collection(collectionName);
-    const result = await collection.insertOne(newProduct);
-    const product = result.ops[0];
+    const existingProduct = await collection.findOne({ prod_name });
+    if (existingProduct) {
+      res.status(400).json({ error: 'A product with this name already exists' });
+      return;
+    }
+    const { insertedId } = await collection.insertOne(newProduct);
+    const product = await collection.findOne({ _id: insertedId });
     res.json(product);
   } catch (err) {
-    console.error(err); // Log the error for debugging purposes
     res.status(500).json({ error: 'Failed to create product' });
   }
 });
 
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const { newName, newPrice } = req.body;
+  const { prod_name: newName, price: newPrice } = req.body;
   try {
-    const filter = { _id: ObjectId(id) };
+    const collection = client.db(databaseName).collection(collectionName);
+    const filter = { _id: new ObjectId(id) };
+    console.log(filter);
     const update = { $set: { prod_name: newName, price: newPrice } };
-    const options = { returnOriginal: false };
-    const result = await productsCollection.findOneAndUpdate(filter, update, options);
+    const options = { returnDocument: 'after' };
+    const result = await collection.findOneAndUpdate(filter, update, options);
+    console.log(result);
     const product = result.value;
     res.json(product);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Failed to update product' });
   }
 });
@@ -115,8 +81,9 @@ app.put('/api/products/:id', async (req, res) => {
 app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
-    const filter = { _id: ObjectId(id) };
-    const result = await productsCollection.findOneAndDelete(filter);
+    const filter = { _id: new ObjectId(id) };
+    const collection = client.db(databaseName).collection(collectionName);
+    const result = await collection.findOneAndDelete(filter);
     const product = result.value;
     res.json(product);
   } catch (err) {
