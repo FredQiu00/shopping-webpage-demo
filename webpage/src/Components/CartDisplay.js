@@ -26,13 +26,14 @@ const CartDisplay = ({ products }) => {
         const updatePromises = [];
 
         for (const item of cart) {
-          const { id, prod_name, description, price, quantity } = item;
+          console.log(item);
+          const { id, quantity } = item;
           const product = products.find((product) => product._id === id);
           if (product) {
             const updatedQuantity = product.quantity - quantity;
             const updatePromise = fetch(`http://localhost:8000/api/products/${id}`, {
               method: 'PUT',
-              body: JSON.stringify({ prod_name: prod_name, description: description, price: price, quantity: updatedQuantity }),
+              body: JSON.stringify({ prod_name: product.prod_name, description: product.description, price: product.price, quantity: updatedQuantity }),
               headers: {
                 'Content-Type': 'application/json',
               },
