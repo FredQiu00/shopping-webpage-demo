@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
@@ -21,8 +23,8 @@ const client = new MongoClient(uri, {
 async function connectToDatabase() {
   try {
     await client.connect();
-    const db = client.db('prod');
-    productsCollection = db.collection('prod');
+    const db = client.db(databaseName);
+    productsCollection = db.collection(collectionName);
     console.log('Connected to the database');
   } catch (err) {
     console.error('Failed to connect to the database:', err);
@@ -42,8 +44,8 @@ app.get('/api/products', async (req, res) => {
 });
 
 app.post('/api/products', async (req, res) => {
-  const { prod_name, price } = req.body;
-  const newProduct = { prod_name, price };
+  const { prod_name, description, price, quantity } = req.body;
+  const newProduct = { prod_name, description, price, quantity };
   try {
     const collection = client.db(databaseName).collection(collectionName);
     const existingProduct = await collection.findOne({ prod_name });
@@ -61,19 +63,17 @@ app.post('/api/products', async (req, res) => {
 
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const { prod_name: newName, price: newPrice } = req.body;
+  const { prod_name: newName, description: newDescription, price: newPrice, quantity: newQuantity } = req.body;
   try {
     const collection = client.db(databaseName).collection(collectionName);
     const filter = { _id: new ObjectId(id) };
     console.log(filter);
-    const update = { $set: { prod_name: newName, price: newPrice } };
+    const update = { $set: { prod_name: newName, description: newDescription, price: newPrice, quantity: newQuantity } };
     const options = { returnDocument: 'after' };
     const result = await collection.findOneAndUpdate(filter, update, options);
-    console.log(result);
     const product = result.value;
     res.json(product);
   } catch (err) {
-    console.error(err);
     res.status(500).json({ error: 'Failed to update product' });
   }
 });
