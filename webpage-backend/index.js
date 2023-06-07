@@ -4,7 +4,7 @@ const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 const app = express();
 app.use(express.json());
 
-const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
+const uri = "uri";
 const databaseName = 'prodList';
 const collectionName = 'prod';
 
