@@ -30,7 +30,9 @@ const ProductCard = ({ product, fetchProducts }) => {
           <Button variant="primary" onClick={() => addToCart(product)}>
             Add to Cart
           </Button>
-          <Button variant="success" onClick={oneTimePurchase}>Buy Now</Button>
+          <Button variant="success" onClick={oneTimePurchase}>
+            Buy Now
+          </Button>
         </div>
       </Card.Body>
     </Card>

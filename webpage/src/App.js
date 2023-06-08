@@ -1,8 +1,11 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './Components/CartContext';
-import Cart from './Components/Cart';
+import NavBar from './Components/Navbar';
 import ProductList from './Components/ProductList';
 import CartDisplay from './Components/CartDisplay';
+import Login from './Admin/Login';
+import Admin from './Admin/Admin';
 import './App.css';
 
 function App() {
@@ -27,11 +30,15 @@ function App() {
 
   return (
     <CartProvider>
-      <div className="App">
-        <Cart />
-        <ProductList products={ products } fetchProducts = { fetchProducts }/>
-        <CartDisplay products={ products } fetchProducts = { fetchProducts }/>
-      </div>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route path="/" element={<><NavBar /><ProductList products={products} fetchProducts={fetchProducts}/><CartDisplay products={products} fetchProducts={fetchProducts}/></>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />}/>
+          </Routes>
+        </div>
+      </Router>
     </CartProvider>
   );
 }
