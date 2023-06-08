@@ -1,0 +1,102 @@
+.add-product-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+.add-product-modal .modal-dialog {
+  width: 100%;
+  max-width: 350px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.add-product-modal .modal-header {
+  padding: 20px;
+  border-bottom: none;
+}
+
+.add-product-modal .modal-title {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  font-size: 24px; /* Increase font size */
+  font-weight: bold; /* Make the text bold */
+}
+
+.add-product-modal .modal-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.add-product-modal .modal-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.add-product-modal .modal-body .form-group {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.add-product-modal .modal-body .form-group .form-label {
+  margin-bottom: 5px;
+}
+
+.add-product-modal .modal-body .form-group .form-control {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.add-product-modal .modal-footer {
+  padding: 20px;
+  border-top: none;
+  display: flex;
+  justify-content: center;
+}
+
+.add-product-modal .modal-footer .btn-secondary,
+.add-product-modal .modal-footer .btn-primary {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: 10px;
+}
+
+.add-product-modal .modal-footer .btn-secondary {
+  background-color: #6c757d;
+}
+
+.add-product-modal .modal-footer .btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.add-product-modal .modal-footer .btn-primary {
+  background-color: #007bff;
+}
+
+.add-product-modal .modal-footer .btn-primary:hover {
+  background-color: #0056b3;
+}

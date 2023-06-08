@@ -10,9 +10,16 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-
-    navigate('/admin');
+    // Simply check username and password are there
+    if (username && password) {
+      navigate('/admin');
+    } else {
+      setUsername('');
+      setPassword('');
+      alert("At least one field (username or password) is missing.");
+    }
   };
+
 
   return (
     <div className="login-container">

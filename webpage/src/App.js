@@ -33,7 +33,11 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<><NavBar /><ProductList products={products} fetchProducts={fetchProducts}/><CartDisplay products={products} fetchProducts={fetchProducts}/></>} />
+            <Route path="/" element={<>
+              <NavBar />
+              <ProductList products={ products } fetchProducts={ fetchProducts }/>
+              <CartDisplay products={ products } fetchProducts={ fetchProducts }/>
+            </>} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<Admin />}/>
           </Routes>
