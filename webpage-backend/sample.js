@@ -37,9 +37,12 @@ async function addFieldsToCollection() {
 
     // Create an array of documents with the desired fields
     const products = [
-      { prod_name: 'Product 1', price: 9.99 },
-      { prod_name: 'Product 2', price: 19.99 },
-      { prod_name: 'Product 3', price: 29.99 },
+      { prod_name: 'Product 1', description: 'This is product 1', price: 10, quantity: 999 },
+      { prod_name: 'Product 2', description: 'This is product 2', price: 20, quantity: 999 },
+      { prod_name: 'Product 3', description: 'This is product 3', price: 30, quantity: 999 },
+      { prod_name: 'Product 4', description: 'This is product 4', price: 40, quantity: 999 },
+      { prod_name: 'Product 5', description: 'This is product 5', price: 50, quantity: 999 },
+      { prod_name: 'Product 6', description: 'This is product 6', price: 50, quantity: 0 },
     ];
 
     // Insert the documents into the collection

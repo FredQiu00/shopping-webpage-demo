@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = "personal uri";
+const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
 const databaseName = 'prodList';
 const collectionName = 'prod';
 
@@ -67,7 +67,6 @@ app.put('/api/products/:id', async (req, res) => {
   try {
     const collection = client.db(databaseName).collection(collectionName);
     const filter = { _id: new ObjectId(id) };
-    console.log(filter);
     const update = { $set: { prod_name: newName, description: newDescription, price: newPrice, quantity: newQuantity } };
     const options = { returnDocument: 'after' };
     const result = await collection.findOneAndUpdate(filter, update, options);
