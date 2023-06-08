@@ -1,10 +1,24 @@
 import React, { useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { CartContext } from './CartContext';
+import { updateQuantity } from './CartDisplay';
 import './Product.css';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, fetchProducts }) => {
   const { addToCart } = useContext(CartContext);
+
+  const oneTimePurchase = () => {
+    try {
+      const updatedQuantity = product.quantity - 1;
+      if (updatedQuantity >= 0) {
+        updateQuantity(product, updatedQuantity);
+        alert(`Checkout completed. Total price: $${product.price}`);
+        fetchProducts();
+      }
+    } catch (err) {
+      alert('An error occurred during checkout. Please try again.');
+    }
+  }
 
   return (
     <Card className="card">
@@ -16,7 +30,7 @@ const ProductCard = ({ product }) => {
           <Button variant="primary" onClick={() => addToCart(product)}>
             Add to Cart
           </Button>
-          <Button variant="success">Buy Now</Button>
+          <Button variant="success" onClick={oneTimePurchase}>Buy Now</Button>
         </div>
       </Card.Body>
     </Card>

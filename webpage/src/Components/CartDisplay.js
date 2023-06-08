@@ -2,7 +2,18 @@ import React, { useContext } from 'react';
 import { CartContext } from './CartContext';
 import './CartDisplay.css';
 
-const CartDisplay = ({ products }) => {
+export const updateQuantity = (product, quantity) => {
+  const updatePromise = fetch(`http://localhost:8000/api/products/${product._id}`, {
+    method: 'PUT',
+    body: JSON.stringify({ prod_name: product.prod_name, description: product.description, price: product.price, quantity: quantity }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return updatePromise;
+}
+
+const CartDisplay = ({ products, fetchProducts }) => {
   const { cart, isCartVisible, toggleCartVisibility, clearCart, removeFromCart } = useContext(CartContext);
 
   if (!isCartVisible) {
@@ -26,28 +37,27 @@ const CartDisplay = ({ products }) => {
         const updatePromises = [];
 
         for (const item of cart) {
-          console.log(item);
           const { id, quantity } = item;
           const product = products.find((product) => product._id === id);
           if (product) {
             const updatedQuantity = product.quantity - quantity;
-            const updatePromise = fetch(`http://localhost:8000/api/products/${id}`, {
-              method: 'PUT',
-              body: JSON.stringify({ prod_name: product.prod_name, description: product.description, price: product.price, quantity: updatedQuantity }),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            updatePromises.push(updatePromise);
+            if (updatedQuantity >= 0) {
+              const updatePromise = updateQuantity(product, updatedQuantity);
+              updatePromises.push(updatePromise);
+            } else {
+              alert(`Insufficient "${product.prod_name}" in stock.`);
+            }
           }
         }
-        await Promise.all(updatePromises);
-        alert(`Checkout completed. Total price: $${totalPrice}`);
-        clearCart();
+        if (updatePromises.length > 0) {
+          await Promise.all(updatePromises)
+          alert(`Checkout completed. Total price: $${totalPrice}`);
+          clearCart();
+          fetchProducts();
+        }
       } catch (err) {
         alert('An error occurred during checkout. Please try again.');
       }
-
     } else {
       alert('Your cart is empty.');
     }

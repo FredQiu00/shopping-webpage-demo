@@ -7,13 +7,13 @@ export const CartProvider = ({ children }) => {
   const [isCartVisible, setIsCartVisible] = React.useState(false);
 
   const addToCart = (product) => {
-    const existingItemIndex = cart.findIndex(item => item.name === product.name);
+    const existingItemIndex = cart.findIndex(item => item.id === product._id);
     if (existingItemIndex !== -1) {
       const updatedItems = [...cart];
       updatedItems[existingItemIndex].quantity++;
       setCart(updatedItems);
     } else {
-      const newItem = { name: product.name, price: product.price, quantity: 1 };
+      const newItem = { id: product._id, name: product.prod_name, price: product.price, quantity: 1 };
       setCart([...cart, newItem]);
     }
   };
