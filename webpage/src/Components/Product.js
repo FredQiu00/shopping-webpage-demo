@@ -23,6 +23,7 @@ const ProductCard = ({ product, fetchProducts }) => {
   return (
     <Card className="card">
       <Card.Body className="container">
+        <img src={`${process.env.PUBLIC_URL}/images/${product._id}.jpg`} alt={product.prod_name} className="product-image" />
         <Card.Title>{product.prod_name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">${product.price}</Card.Subtitle>
         <Card.Text>{product.description}</Card.Text>

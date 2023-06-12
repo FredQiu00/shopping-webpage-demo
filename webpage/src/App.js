@@ -4,8 +4,10 @@ import { CartProvider } from './Components/CartContext';
 import NavBar from './Components/Navbar';
 import ProductList from './Components/ProductList';
 import CartDisplay from './Components/CartDisplay';
+import Footer from './Components/Footer';
 import Login from './Admin/Login';
 import Admin from './Admin/Admin';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
@@ -37,6 +39,7 @@ function App() {
               <NavBar />
               <ProductList products={ products } fetchProducts={ fetchProducts }/>
               <CartDisplay products={ products } fetchProducts={ fetchProducts }/>
+              <Footer />
             </>} />
             <Route path="/login" element={<Login />} />
             <Route path="/admin" element={<Admin />}/>

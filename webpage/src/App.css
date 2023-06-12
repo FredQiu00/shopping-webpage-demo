@@ -1,15 +1,24 @@
-/* App.css */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 .App {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   width: 100vw;
-  height: 10vh;
+  min-height: 100vh;
+  background: #fafafa;
 }
 
-.App > .ProductList {
-  width: 75%;
+.App > .routes-container {
+  width: 90%;
+  margin: 20px auto;
+  max-width: 1200px;
 }
 
-.App > .cart-display {
-  width: 30%;
+@media (max-width: 768px) {
+  .App > .routes-container {
+    width: 95%;
+  }
 }

@@ -1,22 +1,35 @@
-.nav-bar{
+.navbar.navbar-dark {
+  background-color: #e66300;
+  color: white;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-around;
   align-items: center;
-  position: fixed;
-  top: 5%;
-  right: 0;
-  transform: translateY(-50%);
-  z-index: 1;
-  padding-right: 20px;
-  background-color: transparent;
+  padding: 20px;
+  position: sticky;
+  width: 100%;
+  z-index: 100;
+  top: 0;
 }
 
-.admin-button {
-  margin-right: 15px;
-  background-color: transparent;
+.brand {
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 40px !important;
+  margin-left: calc(50% - 160px);
 }
 
-.cart-button {
-  margin-right: 15px;
+.nav-buttons {
+  margin-left: auto;
+}
+
+.nav-buttons button {
+  color: white;
   background-color: transparent;
+  margin-left: 10px;
+}
+
+.navbar button:last-child {
+  margin-right: 10px;
 }

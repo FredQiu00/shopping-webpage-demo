@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button } from 'react-bootstrap';
+import { Navbar, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import './Navbar.css';
@@ -17,7 +17,9 @@ const NavBar = () => {
   };
 
   return (
-      <div className="nav-bar">
+    <Navbar expand="lg" className="navbar navbar-dark">
+      <Navbar.Brand href="/" className="brand">Fruit Market</Navbar.Brand>
+      <div className='nav-buttons'>
         <Button className="admin-button" onClick={() => navigate('/login')}>
           Admin
         </Button>
@@ -25,6 +27,7 @@ const NavBar = () => {
           Cart ({getTotalSum()})
         </Button>
       </div>
+    </Navbar>
   );
 };
 

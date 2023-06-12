@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { CartContext } from './CartContext';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import './CartDisplay.css';
 
 export const updateQuantity = (product, quantity) => {
@@ -68,52 +69,48 @@ const CartDisplay = ({ products, fetchProducts }) => {
   };
 
   return (
-    <div className="cart-display">
-      <h2>Shopping Cart</h2>
-      <div className="cart-description">
-        <p>Item</p>
-        <p>Unit Price</p>
-        <p>Quantity</p>
-      </div>
+    <Container fluid className={`cart-display ${isCartVisible ? 'open' : ''}`}>
+      <h2>My Cart</h2>
+      <Row className="cart-description">
+        <Col xs={4}>Item</Col>
+        <Col xs={4}>Unit Price (lb)</Col>
+        <Col xs={4}>Quantity</Col>
+      </Row>
       {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+        <Row>The cart is empty...</Row>
       ) : (
         <>
           {cart.map((item, index) => (
-            <div key={index} className="cart-item">
-              <p>{item.name}</p>
-              <p>${item.price}</p>
-              <select
-                value={item.quantity}
-                onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
-                id="quantity-select"
-              >
-                {[...Array(item.quantity + 1).keys()].map((number) => (
-                <option key={number} value={number}>
-                  {number === 0 ? `Remove item` : number}
-                </option>
-                ))}
-              </select>
-            </div>
+            <Row key={index} className="cart-item">
+              <Col xs={4} className='item-name'>{item.name}</Col>
+              <Col xs={4} className='item-price'>${item.price}</Col>
+              <Col xs={4}>
+                <select
+                  value={item.quantity}
+                  onChange={(e) => handleQuantityChange(index, parseInt(e.target.value))}
+                  id="quantity-select"
+                >
+                  {[...Array(item.quantity + 1).keys()].map((number) => (
+                  <option key={number} value={number}>
+                    {number === 0 ? `Remove item` : number}
+                  </option>
+                  ))}
+                </select>
+              </Col>
+            </Row>
           ))}
-          <div className="total-price">
-            <p>Total Price:</p>
-            <p>${totalPrice}</p>
-          </div>
+          <Row className="total-price">
+            <Col xs={4}>Total Price:</Col>
+            <Col xs={8}>${totalPrice}</Col>
+          </Row>
         </>
       )}
-      <div className="cart-buttons">
-        <button className="clear-cart-button" onClick={handleClearCart}>
-          Clear Cart
-        </button>
-        <button className="close-cart-button" onClick={handleCloseCart}>
-          Close Cart
-        </button>
-        <button className="checkout-button" onClick={handleCheckout}>
-          Checkout
-        </button>
-      </div>
-    </div>
+      <Row className="cart-buttons">
+        <Button variant="primary" className="checkout-button" onClick={handleCheckout}>Checkout</Button>
+        <Button variant="secondary" className="close-cart-button" onClick={handleCloseCart}>Close</Button>
+        <Button variant="warning" className="clear-cart-button" onClick={handleClearCart}>Clear</Button>
+      </Row>
+    </Container>
   );
 };
 
