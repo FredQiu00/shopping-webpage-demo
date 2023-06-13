@@ -1,5 +1,5 @@
 .card {
-  margin: 20px 0;
+  margin: 20px 30px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   transition: all 0.3s;
   border-radius: 5px;
@@ -9,7 +9,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  width: 40%;
+  max-width: 300px;
+  min-width: 200px;
+  width: 80%;
 }
 
 .card:hover {
@@ -63,9 +65,27 @@
 }
 
 .button-container button:first-child {
+  background-color: orange;
+  border: none;
   margin-left: 0;
+  font-weight: bold;
+}
+
+.button-container button:first-child:hover {
+  background-color: #e66300 !important;
+  border: none;
+  color: white;
+}
+
+.button-container button:last-child:hover {
+  background-color: seagreen;
+  border: none;
+  color: white;
 }
 
 .button-container button:last-child {
+  background-color: lightseagreen;
+  border: none;
   margin-right: 0;
+  font-weight: bold;
 }

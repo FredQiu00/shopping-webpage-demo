@@ -28,7 +28,37 @@
   color: white;
   background-color: transparent;
   margin-left: 10px;
+  border-color: #fff;
+  font-weight: bold;
 }
+
+.navbar button.admin-button {
+  position: relative;
+  transition: all 0.3s ease;
+  width: max-content;
+}
+
+.navbar button.admin-button::after {
+  content: "\00bb";
+  position: absolute;
+  top: 50%;
+  right: -20px;
+  transform: translateY(-50%);
+  font-weight: bold;
+  transition: all 0.5s ease;
+  opacity: 0;
+  padding-right: 6px;
+}
+
+.navbar button.admin-button:hover {
+  padding-right: 20px;
+}
+
+.navbar button.admin-button:hover::after {
+  opacity: 1;
+  right: 0;
+}
+
 
 .navbar button:last-child {
   margin-right: 10px;

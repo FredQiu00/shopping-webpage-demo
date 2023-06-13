@@ -73,8 +73,8 @@ const CartDisplay = ({ products, fetchProducts }) => {
       <h2>My Cart</h2>
       <Row className="cart-description">
         <Col xs={4}>Item</Col>
-        <Col xs={4}>Unit Price (lb)</Col>
-        <Col xs={4}>Quantity</Col>
+        <Col xs={4}>Unit Price</Col>
+        <Col xs={4}>Quantity (lb)</Col>
       </Row>
       {cart.length === 0 ? (
         <Row>The cart is empty...</Row>
@@ -107,8 +107,8 @@ const CartDisplay = ({ products, fetchProducts }) => {
       )}
       <Row className="cart-buttons">
         <Button variant="primary" className="checkout-button" onClick={handleCheckout}>Checkout</Button>
-        <Button variant="secondary" className="close-cart-button" onClick={handleCloseCart}>Close</Button>
         <Button variant="warning" className="clear-cart-button" onClick={handleClearCart}>Clear</Button>
+        <Button variant="secondary" className="close-cart-button" onClick={handleCloseCart}>Close</Button>
       </Row>
     </Container>
   );
