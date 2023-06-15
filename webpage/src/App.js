@@ -7,6 +7,7 @@ import CartDisplay from './Components/CartDisplay';
 import Footer from './Components/Footer';
 import Login from './Admin/Login';
 import Admin from './Admin/Admin';
+import Stat from './Admin/Statistic';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
@@ -42,7 +43,8 @@ function App() {
               <Footer />
             </>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Admin />}/>
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/stats" element={<Stat />} />
           </Routes>
         </div>
       </Router>

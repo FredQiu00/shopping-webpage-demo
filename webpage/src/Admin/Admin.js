@@ -75,7 +75,7 @@ const Admin = () => {
   const handleUpdateItem = async (itemId, updatedItem) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/products/${itemId}`,
+        `http://localhost:8000/api/products/update-inventory/${itemId}`,
         {
           method: 'PUT',
           headers: {
@@ -140,6 +140,9 @@ const Admin = () => {
       </table>
       <Button className="add-item" onClick={() => setAddItem(true)}>
         Add Item
+      </Button>
+      <Button className="stat" onClick={() => navigate('/stats')}>
+        View Stats
       </Button>
       <Button className="back-button" onClick={() => navigate('/')}>
         Log Off

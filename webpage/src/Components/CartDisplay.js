@@ -3,10 +3,17 @@ import { CartContext } from './CartContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import './CartDisplay.css';
 
-export const updateQuantity = (product, quantity) => {
+export const updateQuantity = (product, quantity, sold, updatedRecord) => {
   const updatePromise = fetch(`http://localhost:8000/api/products/${product._id}`, {
     method: 'PUT',
-    body: JSON.stringify({ prod_name: product.prod_name, description: product.description, price: product.price, quantity: quantity }),
+    body: JSON.stringify({
+      prod_name: product.prod_name,
+      description: product.description,
+      price: product.price,
+      quantity: quantity,
+      sold: sold,
+      record: updatedRecord
+    }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -15,7 +22,13 @@ export const updateQuantity = (product, quantity) => {
 }
 
 const CartDisplay = ({ products, fetchProducts }) => {
-  const { cart, isCartVisible, toggleCartVisibility, clearCart, removeFromCart } = useContext(CartContext);
+  const {
+    cart,
+    isCartVisible,
+    toggleCartVisibility,
+    clearCart,
+    removeFromCart
+  } = useContext(CartContext);
 
   if (!isCartVisible) {
     return null;
@@ -29,25 +42,27 @@ const CartDisplay = ({ products, fetchProducts }) => {
     toggleCartVisibility();
   }
 
-
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
   const handleCheckout = async () => {
     if (cart.length > 0) {
       try {
         const updatePromises = [];
-
-        for (const item of cart) {
-          const { id, quantity } = item;
-          const product = products.find((product) => product._id === id);
-          if (product) {
-            const updatedQuantity = product.quantity - quantity;
+        for (const product of products) {
+          const { _id, prod_name, quantity, sold } = product;
+          const item = cart.find((item) => item.id === _id);
+          if (item) {
+            const updatedQuantity = quantity - item.quantity;
+            const updateSold = sold + item.quantity;
             if (updatedQuantity >= 0) {
-              const updatePromise = updateQuantity(product, updatedQuantity);
+              const updatePromise = updateQuantity(product, updatedQuantity, updateSold, updateSold);
               updatePromises.push(updatePromise);
             } else {
-              alert(`Insufficient "${product.prod_name}" in stock.`);
+              alert(`Insufficient "${prod_name}" in stock.`);
             }
+          } else {
+            const updatePromise = updateQuantity(product, quantity, sold, sold);
+            updatePromises.push(updatePromise);
           }
         }
         if (updatePromises.length > 0) {

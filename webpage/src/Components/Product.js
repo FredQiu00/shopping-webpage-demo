@@ -7,11 +7,25 @@ import './Product.css';
 const ProductCard = ({ product, fetchProducts }) => {
   const { addToCart } = useContext(CartContext);
 
-  const oneTimePurchase = () => {
+  const oneTimePurchase = async () => {
     try {
       const updatedQuantity = product.quantity - 1;
       if (updatedQuantity >= 0) {
-        updateQuantity(product, updatedQuantity);
+        const response = await fetch('http://localhost:8000/api/products', {
+          method: 'GET',
+        });
+        let data = await response.json();
+        const siftedData = data.filter(item => item.quantity !== 0);
+        const updatedProducts = siftedData.map((prod) => {
+          if (prod._id === product._id) {
+            // If it's the product being purchased, decrement quantity, increment sold, and add to record
+            return { ...prod, quantity: updatedQuantity, sold: product.sold + 1, record: product.sold + 1 };
+          } else {
+            // If it's not the product being purchased, just add the last sold value (or 0 if there are no sales yet) to the record
+            return { ...prod, record: prod.sold};
+          }
+        });
+        await Promise.all(updatedProducts.map((prod) => updateQuantity(prod, prod.quantity, prod.sold, prod.record)));
         alert(`Checkout completed. Total price: $${product.price}`);
         fetchProducts();
       }

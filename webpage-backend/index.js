@@ -45,7 +45,7 @@ app.get('/api/products', async (req, res) => {
 
 app.post('/api/products', async (req, res) => {
   const { prod_name, description, price, quantity } = req.body;
-  const newProduct = { prod_name, description, price, quantity };
+  const newProduct = { prod_name, description, price, quantity, sold: 0, record: [] };
   try {
     const collection = client.db(databaseName).collection(collectionName);
     const existingProduct = await collection.findOne({ prod_name });
@@ -61,13 +61,63 @@ app.post('/api/products', async (req, res) => {
   }
 });
 
-app.put('/api/products/:id', async (req, res) => {
+// Handle manual (admin) update, record does not change
+app.put('/api/products/update-inventory/:id', async (req, res) => {
   const { id } = req.params;
-  const { prod_name: newName, description: newDescription, price: newPrice, quantity: newQuantity } = req.body;
+  const {
+    prod_name: newName,
+    description: newDescription,
+    price: newPrice,
+    quantity: newQuantity,
+    sold: newSold,
+  } = req.body;
   try {
     const collection = client.db(databaseName).collection(collectionName);
     const filter = { _id: new ObjectId(id) };
-    const update = { $set: { prod_name: newName, description: newDescription, price: newPrice, quantity: newQuantity } };
+    const update = {
+      $set: {
+        prod_name: newName,
+        description: newDescription,
+        price: newPrice,
+        quantity: newQuantity,
+        sold: newSold
+      }
+    };
+    const options = { returnDocument: 'after' };
+    const result = await collection.findOneAndUpdate(filter, update, options);
+    const product = result.value;
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update product' });
+  }
+});
+
+// Handle cart update
+app.put('/api/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    prod_name: newName,
+    description: newDescription,
+    price: newPrice,
+    quantity: newQuantity,
+    sold: newSold,
+    record: updatedRecord
+  } = req.body;
+  try {
+    const collection = client.db(databaseName).collection(collectionName);
+    const filter = { _id: new ObjectId(id) };
+    const update = {
+      $set: {
+        prod_name: newName,
+        description: newDescription,
+        price: newPrice,
+        quantity: newQuantity,
+        sold: newSold
+      },
+      $push: {
+        record: updatedRecord,
+      }
+    };
     const options = { returnDocument: 'after' };
     const result = await collection.findOneAndUpdate(filter, update, options);
     const product = result.value;

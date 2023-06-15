@@ -29,8 +29,9 @@
   margin-right: 10px;
 }
 
-.add-item {
+.add-item, .stat {
   margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .back-button {

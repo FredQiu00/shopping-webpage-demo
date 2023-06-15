@@ -37,12 +37,24 @@ async function addFieldsToCollection() {
 
     // Create an array of documents with the desired fields
     const products = [
-      { prod_name: 'Product 1', description: 'This is product 1', price: 10, quantity: 999 },
-      { prod_name: 'Product 2', description: 'This is product 2', price: 20, quantity: 999 },
-      { prod_name: 'Product 3', description: 'This is product 3', price: 30, quantity: 999 },
-      { prod_name: 'Product 4', description: 'This is product 4', price: 40, quantity: 999 },
-      { prod_name: 'Product 5', description: 'This is product 5', price: 50, quantity: 999 },
-      { prod_name: 'Product 6', description: 'This is product 6', price: 50, quantity: 0 },
+      { prod_name: 'Apple',
+      description: 'Crisp, juicy, and delicious: the perfect apple for every bite.',
+      price: 1.47, quantity: 999, sold: 0, record: [] },
+      { prod_name: 'Banana',
+      description: 'Delicious and healthy: the versatile banana for any occasion.',
+      price: 0.99, quantity: 999, sold: 0, record: [] },
+      { prod_name: 'White Peach',
+      description: 'Juicy and flavorful, indulge in the delectable peach.',
+      price: 2.49, quantity: 999, sold: 0, record: [] },
+      { prod_name: 'Pineapple',
+      description: 'Exotic tropical delight: the juicy and tangy pineapple.',
+      price: 1.25, quantity: 999, sold: 0, record: [] },
+      { prod_name: 'Watermelon',
+      description: 'Juicy and refreshing: the summertime delight, watermelon.',
+      price: 2.25, quantity: 999, sold: 0, record: [] },
+      { prod_name: 'Pear',
+      description: 'No pears in stock',
+      price: 50, quantity: 0, sold: 0 },
     ];
 
     // Insert the documents into the collection
