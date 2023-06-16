@@ -12,7 +12,8 @@ const Login = () => {
     e.preventDefault();
     // Simply check username and password are there
     if (username && password) {
-      navigate('/admin');
+      // Test here, change back to /admin later when new /admin page is done
+      navigate('/admin/product');
     } else {
       setUsername('');
       setPassword('');

@@ -7,9 +7,6 @@ export const updateQuantity = (product, quantity, sold, updatedRecord) => {
   const updatePromise = fetch(`http://localhost:8000/api/products/${product._id}`, {
     method: 'PUT',
     body: JSON.stringify({
-      prod_name: product.prod_name,
-      description: product.description,
-      price: product.price,
       quantity: quantity,
       sold: sold,
       record: updatedRecord

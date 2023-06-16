@@ -8,7 +8,8 @@ app.use(express.json());
 
 const uri = 'personal uri';
 const databaseName = 'prodList';
-const collectionName = 'prod';
+const productsCollectionName = 'prod';
+const usersCollectionName = 'users';
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -19,12 +20,14 @@ const client = new MongoClient(uri, {
   }
 });
 
+let productsCollection, usersCollection;
 
 async function connectToDatabase() {
   try {
     await client.connect();
     const db = client.db(databaseName);
-    productsCollection = db.collection(collectionName);
+    productsCollection = db.collection(productsCollectionName);
+    usersCollection = db.collection(usersCollectionName);
     console.log('Connected to the database');
   } catch (err) {
     console.error('Failed to connect to the database:', err);
@@ -33,9 +36,10 @@ async function connectToDatabase() {
 
 connectToDatabase();
 
+// Products' info apis
 app.get('/api/products', async (req, res) => {
   try {
-    const collection = client.db(databaseName).collection(collectionName);
+    const collection = client.db(databaseName).collection(productsCollectionName);
     const products = await collection.find().toArray();
     res.json(products);
   } catch (err) {
@@ -47,7 +51,7 @@ app.post('/api/products', async (req, res) => {
   const { prod_name, description, price, quantity } = req.body;
   const newProduct = { prod_name, description, price, quantity, sold: 0, record: [] };
   try {
-    const collection = client.db(databaseName).collection(collectionName);
+    const collection = client.db(databaseName).collection(productsCollectionName);
     const existingProduct = await collection.findOne({ prod_name });
     if (existingProduct) {
       res.status(400).json({ error: 'A product with this name already exists' });
@@ -69,10 +73,9 @@ app.put('/api/products/update-inventory/:id', async (req, res) => {
     description: newDescription,
     price: newPrice,
     quantity: newQuantity,
-    sold: newSold,
   } = req.body;
   try {
-    const collection = client.db(databaseName).collection(collectionName);
+    const collection = client.db(databaseName).collection(productsCollectionName);
     const filter = { _id: new ObjectId(id) };
     const update = {
       $set: {
@@ -80,7 +83,6 @@ app.put('/api/products/update-inventory/:id', async (req, res) => {
         description: newDescription,
         price: newPrice,
         quantity: newQuantity,
-        sold: newSold
       }
     };
     const options = { returnDocument: 'after' };
@@ -96,21 +98,15 @@ app.put('/api/products/update-inventory/:id', async (req, res) => {
 app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   const {
-    prod_name: newName,
-    description: newDescription,
-    price: newPrice,
     quantity: newQuantity,
     sold: newSold,
     record: updatedRecord
   } = req.body;
   try {
-    const collection = client.db(databaseName).collection(collectionName);
+    const collection = client.db(databaseName).collection(productsCollectionName);
     const filter = { _id: new ObjectId(id) };
     const update = {
       $set: {
-        prod_name: newName,
-        description: newDescription,
-        price: newPrice,
         quantity: newQuantity,
         sold: newSold
       },
@@ -131,7 +127,7 @@ app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const filter = { _id: new ObjectId(id) };
-    const collection = client.db(databaseName).collection(collectionName);
+    const collection = client.db(databaseName).collection(productsCollectionName);
     const result = await collection.findOneAndDelete(filter);
     const product = result.value;
     res.json(product);
@@ -139,6 +135,96 @@ app.delete('/api/products/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete product' });
   }
 });
+
+// Users' info apis
+app.get('/api/users', async (req, res) => {
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+    const products = await collection.find().toArray();
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch users\' info' });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  const { username, password, email, phone } = req.body;
+  const newUser = { username, password, email, phone };
+
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+
+    // Check if user with same username, email or phone already exists
+    const existingUser = await collection.findOne({ $or: [{ username }, { email }, { phone }] });
+    if (existingUser) {
+      let errorMessage;
+      if (existingUser.username === username) errorMessage = 'A user with this name already exists';
+      else if (existingUser.email === email) errorMessage = 'Email already registered';
+      else errorMessage = 'Phone number already registered';
+
+      res.status(400).json({ error: errorMessage });
+      return;
+    }
+
+    // If no existing user, add the new user
+    const { insertedId } = await collection.insertOne(newUser);
+    const user = await collection.findOne({ _id: insertedId });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to register, please try again later.' });
+  }
+});
+
+// Manage user's info
+app.put('/api/users/info/:id', async (req, res) => {
+  const { id } =  req.params;
+  const {
+    username: newName,
+    password: newPassword,
+    email: newEmail,
+    phone: newPhone
+  } = req.body;
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+    const filter = { _id: new ObjectId(id) };
+    const update = {
+      $set: {
+        username: newName,
+        password: newPassword,
+        email: newEmail,
+        phone: newPhone
+      }
+    };
+    const options = { returnDocument: 'after' };
+    const result = await collection.findOneAndUpdate(filter, update, options);
+    const user = result.value;
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user\'s info' });
+  }
+});
+
+// Manage user's purchase history
+app.put('/api/users/history/:id', async (req, res) => {
+  const { id } =  req.params;
+  const { bought: updatedBought } = req.body;
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+    const filter = { _id: new ObjectId(id) };
+    const update = {
+      $push: {
+        bought: updatedBought
+      }
+    };
+    const options = { returnDocument: 'after' };
+    const result = await collection.findOneAndUpdate(filter, update, options);
+    const user = result.value;
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update user\'s purchase history' });
+  }
+});
+
 
 app.listen(8000, () => {
   console.log('Server started on port 8000');

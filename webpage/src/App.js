@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './Components/CartContext';
 import NavBar from './Components/Navbar';
@@ -6,13 +6,16 @@ import ProductList from './Components/ProductList';
 import CartDisplay from './Components/CartDisplay';
 import Footer from './Components/Footer';
 import Login from './Admin/Login';
-import Admin from './Admin/Admin';
+import ProdServer from './Admin/ProdServer';
+import UserServer from './Admin/UserServer';
+import UserHistory from './Admin/UserHistory'
 import Stat from './Admin/Statistic';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
+
 function App() {
-  const [products, setProducts] = React.useState([]);
+  const [products, setProducts] = useState([]);
 
   React.useEffect(() => {
     fetchProducts();
@@ -43,7 +46,9 @@ function App() {
               <Footer />
             </>} />
             <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin/product" element={<ProdServer />} />
+            <Route path="/admin/user" element={<UserServer />} />
+            <Route path="/admin/user/:id/history" element={<UserHistory />}/>
             <Route path="/stats" element={<Stat />} />
           </Routes>
         </div>
