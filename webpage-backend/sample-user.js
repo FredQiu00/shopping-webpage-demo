@@ -1,4 +1,7 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+
 const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 
 const app = express();
@@ -39,7 +42,7 @@ async function addFieldsToCollection() {
     const users = [
       {
         username: 'admin',
-        password: '123456qwerty',
+        password: await bcrypt.hash('123456qwerty', saltRounds),
         email: 'admin@email.com',
         phone: '8250000001',
         bought: []

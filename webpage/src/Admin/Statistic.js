@@ -215,7 +215,7 @@ const Stat = () => {
           purchases on each item</h2>
         <Line data={lineChartData} options={optionsForLine}/>
       </div>
-      <Button onClick={() => navigate('/admin')}>
+      <Button onClick={() => navigate('/admin/product')}>
         Back
       </Button>
     </div>

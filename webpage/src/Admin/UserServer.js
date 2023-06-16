@@ -29,7 +29,8 @@ const UserServer = () => {
 
   return (
     <div className="admin-container">
-      <table className='product-table'>
+      <h2 className="admin-heading">User List</h2>
+      <table className='info-table'>
         <thead>
           <tr>
             <th>id</th>
@@ -48,7 +49,7 @@ const UserServer = () => {
               <td>{user.phone}</td>
               <td>
                 <Button
-                  className='check-history'
+                  className='action-button'
                   onClick={() => displayHistory(user._id, user.bought)}
                 >
                   Check
@@ -58,7 +59,10 @@ const UserServer = () => {
           ))}
         </tbody>
       </table>
-      <Button onClick={() => navigate('/')}>Back</Button>
+      <Button className="logoff-button" onClick={() => navigate('/login')}>
+        Log Off
+      </Button>
+      <Button className="back-button" onClick={() => navigate('/admin')}>Back</Button>
     </div>
   );
 

@@ -6,6 +6,7 @@ import ProductList from './Components/ProductList';
 import CartDisplay from './Components/CartDisplay';
 import Footer from './Components/Footer';
 import Login from './Admin/Login';
+import Admin from './Admin/Admin';
 import ProdServer from './Admin/ProdServer';
 import UserServer from './Admin/UserServer';
 import UserHistory from './Admin/UserHistory'
@@ -46,10 +47,11 @@ function App() {
               <Footer />
             </>} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/admin/product" element={<ProdServer />} />
+            <Route path="/admin/product/stats" element={<Stat />} />
             <Route path="/admin/user" element={<UserServer />} />
             <Route path="/admin/user/:id/history" element={<UserHistory />}/>
-            <Route path="/stats" element={<Stat />} />
           </Routes>
         </div>
       </Router>

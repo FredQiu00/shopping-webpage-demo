@@ -1,3 +1,5 @@
+import React, { useState, useEffect } from 'react';
+import { Chart as ChartJS } from 'chart.js';
 import { useLocation, useParams } from 'react-router-dom';
 
 function UserHistory() {
@@ -19,6 +21,8 @@ function UserHistory() {
       </div>
     );
   }
+
+
 
   // Display the history data
   return (

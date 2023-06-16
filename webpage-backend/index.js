@@ -1,5 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const saltRounds = 10; // Change this to increase or decrease the complexity of hash
+
 const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
 
 const app = express();
@@ -11,7 +14,6 @@ const databaseName = 'prodList';
 const productsCollectionName = 'prod';
 const usersCollectionName = 'users';
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -147,9 +149,14 @@ app.get('/api/users', async (req, res) => {
   }
 });
 
+// Sign-up
 app.post('/api/users', async (req, res) => {
   const { username, password, email, phone } = req.body;
-  const newUser = { username, password, email, phone };
+
+  // Hash password before storing it
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+  const newUser = { username, password: hashedPassword, email, phone };
 
   try {
     const collection = client.db(databaseName).collection(usersCollectionName);
@@ -174,6 +181,35 @@ app.post('/api/users', async (req, res) => {
     res.status(500).json({ error: 'Failed to register, please try again later.' });
   }
 });
+
+// Login checking
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    res.status(400).json({ error: 'Both username and password must be provided' });
+    return;
+  }
+
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+    const user = await collection.findOne({ username: username });
+
+    // Compare the hashed password with the plain password
+    const validPassword = user ? await bcrypt.compare(password, user.password) : false;
+
+    if (!user || !validPassword) {
+      res.status(401).json({ error: 'Incorrect username or password' });
+    } else {
+      // Do not send the hashed password back
+      delete user.password;
+      res.json(user);
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to authenticate user' });
+  }
+});
+
 
 // Manage user's info
 app.put('/api/users/info/:id', async (req, res) => {

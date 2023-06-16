@@ -101,7 +101,7 @@ const ProdServer = () => {
   return (
     <div className="admin-container">
       <h2 className="admin-heading">Product List</h2>
-      <table className="product-table">
+      <table className="info-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -141,11 +141,14 @@ const ProdServer = () => {
       <Button className="add-item" onClick={() => setAddItem(true)}>
         Add Item
       </Button>
-      <Button className="stat" onClick={() => navigate('/stats')}>
+      <Button className="stat" onClick={() => navigate('./stats')}>
         View Stats
       </Button>
-      <Button className="back-button" onClick={() => navigate('/')}>
+      <Button className="logoff-button" onClick={() => navigate('/login')}>
         Log Off
+      </Button>
+      <Button className='back-button' onClick={() => navigate('/admin')}>
+        Back
       </Button>
       <ModifyProduct
         show={addItem}

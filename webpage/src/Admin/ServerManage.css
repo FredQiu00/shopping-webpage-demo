@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap');
+
 .admin-container {
   margin: 20px;
   position: relative;
+  font-family: 'Open Sans', sans-serif;
 }
 
 .admin-heading {
@@ -8,34 +11,44 @@
   margin-bottom: 20px;
 }
 
-.product-table {
+.info-table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
 }
 
-.product-table th,
-.product-table td {
+.info-table th,
+.info-table td {
   padding: 10px;
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
 
-.product-table th {
+.info-table th {
   font-weight: bold;
 }
 
 .action-button {
-  margin-right: 10px;
+  margin-right: 10px !important;
+  background-color: #008CBA !important;
+  border: none !important;
+  color: white !important;
+  padding: 10px 24px !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  font-size: 16px !important;
+  transition-duration: 0.4s !important;
+  cursor: pointer !important;
 }
 
-.add-item, .stat {
-  margin-bottom: 10px;
-  margin-right: 10px;
+.action-button:hover {
+  background-color: white !important;
+  color: #008CBA !important;
+  border: 2px solid #008CBA !important;
 }
 
-.back-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+.add-item, .stat, .back-button {
+  margin-bottom: 10px !important;
+  margin-right: 10px !important;
 }

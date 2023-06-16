@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
 import { Navbar, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
 import './Navbar.css';
 
 const NavBar = () => {
   const { cart, toggleCartVisibility } = useContext(CartContext);
-  const navigate = useNavigate();
 
   const getTotalSum = () => {
     let sum = 0;
@@ -20,7 +18,7 @@ const NavBar = () => {
     <Navbar expand="lg" className="navbar navbar-dark">
       <Navbar.Brand href="/" className="brand">Fruit Market</Navbar.Brand>
       <div className='nav-buttons'>
-        <Button className="admin-button" onClick={() => navigate('/login')}>
+        <Button className="admin-button" onClick={() => window.open('/login', '_blank')}>
           Admin
         </Button>
         <Button className="cart-button" onClick={toggleCartVisibility}>

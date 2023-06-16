@@ -10,17 +10,36 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Simply check username and password are there
+
     if (username && password) {
-      // Test here, change back to /admin later when new /admin page is done
-      navigate('/admin/product');
+      fetch('http://localhost:8000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+        .then(response => response.json().then(data => ({ status: response.status, body: data })))
+        .then(data => {
+          if (data.status === 200) {
+            navigate('/admin');
+          } else {
+            setUsername('');
+            setPassword('');
+            alert(data.body.error || "Username or password is incorrect.");
+          }
+        })
+        .catch(() => {
+          setUsername('');
+          setPassword('');
+          alert('Failed to authenticate.');
+        });
     } else {
       setUsername('');
       setPassword('');
       alert("At least one field (username or password) is missing.");
     }
   };
-
 
   return (
     <div className="login-container">
