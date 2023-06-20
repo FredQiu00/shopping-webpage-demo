@@ -128,7 +128,7 @@ const UserHomePage = ({ products }) => {
             </Button>
             {showHistory &&
               <div className='purchase-history'>
-                <h3>Purchase History</h3>
+                <h3>Purchase History ({userInfo.bought.length})</h3>
                 {userInfo.bought.length > 0 ? [...userInfo.bought].reverse().map((session, index) => (
                   <>
                     <div key={index} className="purchase-session">
