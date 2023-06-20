@@ -1,0 +1,77 @@
+.user-history-container {
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #F5F5F5;
+  font-family: 'Arial', sans-serif;
+}
+
+.user-id {
+  font-size: 28px;
+  font-weight: bold;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.chart-title {
+  font-size: 22px;
+  color: #444;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.session-select {
+  margin-left: 5px;
+  padding: 3px 6px;
+  font-size: 16px;
+  color: #444;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.doughnut-container, .stacked-bar-container {
+  width: 48%;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.bar-chart-container {
+  height: 400px;
+}
+
+.most-least-purchased {
+  background-color: #fff;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  color: #444;
+}
+
+.back-button {
+  display: block;
+  margin: 20px auto;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007BFF;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}

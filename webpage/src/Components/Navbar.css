@@ -32,13 +32,15 @@
   font-weight: bold;
 }
 
-.navbar button.admin-button {
+.navbar button.admin-button,
+.navbar button.user-login {
   position: relative;
   transition: all 0.3s ease;
   width: max-content;
 }
 
-.navbar button.admin-button::after {
+.navbar button.admin-button::after,
+.navbar button.user-login::after {
   content: "\00bb";
   position: absolute;
   top: 50%;
@@ -50,15 +52,16 @@
   padding-right: 6px;
 }
 
-.navbar button.admin-button:hover {
+.navbar button.admin-button:hover,
+.navbar button.user-login:hover {
   padding-right: 20px;
 }
 
-.navbar button.admin-button:hover::after {
+.navbar button.admin-button:hover::after,
+.navbar button.user-login:hover::after {
   opacity: 1;
   right: 0;
 }
-
 
 .navbar button:last-child {
   margin-right: 10px;

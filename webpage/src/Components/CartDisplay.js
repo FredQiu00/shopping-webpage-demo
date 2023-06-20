@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { CartContext } from './CartContext';
+import { UserContext } from './UserContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import './CartDisplay.css';
 
@@ -18,6 +19,19 @@ export const updateQuantity = (product, quantity, sold, updatedRecord) => {
   return updatePromise;
 }
 
+export const updatePurchaseHistory = (user, updatedHistory) => {
+  const updatePromise = fetch(`http://localhost:8000/api/users/history/${user._id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+      bought: updatedHistory
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  });
+  return updatePromise;
+}
+
 const CartDisplay = ({ products, fetchProducts }) => {
   const {
     cart,
@@ -26,6 +40,8 @@ const CartDisplay = ({ products, fetchProducts }) => {
     clearCart,
     removeFromCart
   } = useContext(CartContext);
+
+  const { user } = useContext(UserContext);
 
   if (!isCartVisible) {
     return null;
@@ -45,6 +61,7 @@ const CartDisplay = ({ products, fetchProducts }) => {
     if (cart.length > 0) {
       try {
         const updatePromises = [];
+        const userHistoryUpdates = [];
         for (const product of products) {
           const { _id, prod_name, quantity, sold } = product;
           const item = cart.find((item) => item.id === _id);
@@ -54,6 +71,7 @@ const CartDisplay = ({ products, fetchProducts }) => {
             if (updatedQuantity >= 0) {
               const updatePromise = updateQuantity(product, updatedQuantity, updateSold, updateSold);
               updatePromises.push(updatePromise);
+              userHistoryUpdates.push({[prod_name]: item.quantity});
             } else {
               alert(`Insufficient "${prod_name}" in stock.`);
             }
@@ -67,6 +85,8 @@ const CartDisplay = ({ products, fetchProducts }) => {
           alert(`Checkout completed. Total price: $${totalPrice}`);
           clearCart();
           fetchProducts();
+          let updatedHistory = cart.map(item => ({ [item.name]: item.quantity }));
+          await updatePurchaseHistory(user, [updatedHistory]);
         }
       } catch (err) {
         alert('An error occurred during checkout. Please try again.');
@@ -75,6 +95,7 @@ const CartDisplay = ({ products, fetchProducts }) => {
       alert('Your cart is empty.');
     }
   };
+
 
   const handleQuantityChange = (index, newQuantity) => {
     removeFromCart(index, newQuantity);

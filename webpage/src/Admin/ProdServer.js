@@ -138,6 +138,9 @@ const ProdServer = () => {
           ))}
         </tbody>
       </table>
+      <Button className='back-button' onClick={() => navigate('/admin')}>
+        Back
+      </Button>
       <Button className="add-item" onClick={() => setAddItem(true)}>
         Add Item
       </Button>
@@ -146,9 +149,6 @@ const ProdServer = () => {
       </Button>
       <Button className="logoff-button" onClick={() => navigate('/login')}>
         Log Off
-      </Button>
-      <Button className='back-button' onClick={() => navigate('/admin')}>
-        Back
       </Button>
       <ModifyProduct
         show={addItem}

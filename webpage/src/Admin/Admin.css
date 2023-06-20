@@ -25,9 +25,9 @@
   position: absolute !important;
   top: 5px !important;
   right: 20px !important;
-  background-color: #f44336 !important;
-  border: none !important;
-  color: white !important;
+  background-color: white !important;
+  color: #f44336 !important;
+  border: 2px solid #f44336 !important;
   padding: 12px 24px !important;
   text-align: center !important;
   text-decoration: none !important;
@@ -38,26 +38,21 @@
 }
 
 .logoff-button:hover {
-  background-color: white !important;
-  color: #f44336 !important;
-  border: 2px solid #f44336 !important;
+  background-color: #f44336 !important;
+  border: none !important;
+  color: white !important;
 }
 
-
-
 .admin-buttons {
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100% !important;
+  display: flex;
+  width: 100%;
 }
 
 .prod-button,
 .user-button {
-  margin: 10px !important;
-  width: 100% !important;
-  background-color: #008CBA !important;
-  border: none !important;
-  color: white !important;
+  background-color: white !important;
+  color: #008CBA !important;
+  border: 2px solid #008CBA !important;
   padding: 15px 32px !important;
   text-align: center !important;
   text-decoration: none !important;
@@ -70,9 +65,9 @@
 
 .prod-button:hover,
 .user-button:hover {
-  background-color: white !important;
-  color: #008CBA !important;
-  border: 2px solid #008CBA !important;
+  background-color: #008CBA !important;
+  border: none !important;
+  color: white !important;
 }
 
 @media (min-width: 768px) {

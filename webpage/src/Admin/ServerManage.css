@@ -30,9 +30,9 @@
 
 .action-button {
   margin-right: 10px !important;
-  background-color: #008CBA !important;
-  border: none !important;
-  color: white !important;
+  background-color: white !important;
+  color: #008CBA !important;
+  border: 2px solid #008CBA !important;
   padding: 10px 24px !important;
   text-align: center !important;
   text-decoration: none !important;
@@ -43,12 +43,43 @@
 }
 
 .action-button:hover {
-  background-color: white !important;
-  color: #008CBA !important;
-  border: 2px solid #008CBA !important;
+  background-color: #008CBA !important;
+  border: none !important;
+  color: white !important;
 }
 
 .add-item, .stat, .back-button {
   margin-bottom: 10px !important;
   margin-right: 10px !important;
+}
+
+.add-item,
+.stat,
+.back-button {
+  background-color: white !important;
+  padding: 5px 10px;
+  font-size: 14px;
+  color: #007bff !important;
+  border: 2px solid #007bff !important;
+  transition: all 0.3s ease;
+  float: left;
+  margin-right: 15px;
+}
+.add-item:hover,
+.stat:hover,
+.back-button:hover {
+  background-color: #007bff !important;
+  color: white !important;
+}
+
+.back-button::before {
+  content: '<<';
+  margin-right: 5px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover::before {
+  margin-right: 10px;
+  opacity: 1;
 }

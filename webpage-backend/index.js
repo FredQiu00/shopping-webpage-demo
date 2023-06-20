@@ -9,7 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = 'personal uri';
+const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
 const databaseName = 'prodList';
 const productsCollectionName = 'prod';
 const usersCollectionName = 'users';
@@ -142,8 +142,9 @@ app.delete('/api/products/:id', async (req, res) => {
 app.get('/api/users', async (req, res) => {
   try {
     const collection = client.db(databaseName).collection(usersCollectionName);
-    const products = await collection.find().toArray();
-    res.json(products);
+    const users = await collection.find().toArray();
+    delete users.password;
+    res.json(users);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch users\' info' });
   }
@@ -156,8 +157,12 @@ app.post('/api/users', async (req, res) => {
   // Hash password before storing it
   const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-  const newUser = { username, password: hashedPassword, email, phone };
-
+  const newUser = { username,
+    password: hashedPassword,
+    email,
+    phone,
+    bought: [],
+    active: true };
   try {
     const collection = client.db(databaseName).collection(usersCollectionName);
 
@@ -176,6 +181,7 @@ app.post('/api/users', async (req, res) => {
     // If no existing user, add the new user
     const { insertedId } = await collection.insertOne(newUser);
     const user = await collection.findOne({ _id: insertedId });
+    delete user.password;
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: 'Failed to register, please try again later.' });
@@ -201,44 +207,79 @@ app.post('/api/login', async (req, res) => {
     if (!user || !validPassword) {
       res.status(401).json({ error: 'Incorrect username or password' });
     } else {
+      // If user is successfully authenticated, update 'active' field to true in database
+      await collection.updateOne(
+         {username: username },
+         { $set: { active: true }}
+      );
+      // Then fetch the updated user document
+      const updatedUser = await collection.findOne({ username: username });
       // Do not send the hashed password back
-      delete user.password;
-      res.json(user);
+      delete updatedUser.password;
+      res.json(updatedUser);
     }
   } catch (err) {
     res.status(500).json({ error: 'Failed to authenticate user' });
   }
 });
 
+// Log out
+app.post('/api/logout/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const collection = client.db(databaseName).collection(usersCollectionName);
+    // Set the 'active' field to false in database
+    await collection.updateOne(
+      { _id: new ObjectId(userId) },
+      { $set: { active: false } }
+    );
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to log out user' });
+  }
+});
+
+
 
 // Manage user's info
 app.put('/api/users/info/:id', async (req, res) => {
-  const { id } =  req.params;
+  const { id } = req.params;
   const {
-    username: newName,
     password: newPassword,
     email: newEmail,
     phone: newPhone
   } = req.body;
+
   try {
     const collection = client.db(databaseName).collection(usersCollectionName);
     const filter = { _id: new ObjectId(id) };
+
     const update = {
       $set: {
-        username: newName,
-        password: newPassword,
-        email: newEmail,
-        phone: newPhone
+        ...(newPassword && { password: newPassword }),
+        ...(newEmail && { email: newEmail }),
+        ...(newPhone && { phone: newPhone })
       }
     };
+
     const options = { returnDocument: 'after' };
     const result = await collection.findOneAndUpdate(filter, update, options);
+
     const user = result.value;
+
+    // If the user is not found, send a 404 response.
+    if (!user) {
+      res.status(404).json({ error: "User not found." });
+      return;
+    }
+
     res.json(user);
   } catch (err) {
     res.status(500).json({ error: 'Failed to update user\'s info' });
   }
 });
+
 
 // Manage user's purchase history
 app.put('/api/users/history/:id', async (req, res) => {
@@ -249,7 +290,9 @@ app.put('/api/users/history/:id', async (req, res) => {
     const filter = { _id: new ObjectId(id) };
     const update = {
       $push: {
-        bought: updatedBought
+        bought: {
+          $each: updatedBought
+        }
       }
     };
     const options = { returnDocument: 'after' };

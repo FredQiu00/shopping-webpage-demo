@@ -23,8 +23,8 @@ const UserServer = () => {
     }
   };
 
-  const displayHistory = (id, history) => {
-    navigate(`/admin/user/${id}/history`, { state: { history } });
+  const displayHistory = (id) => {
+    navigate(`/admin/user/${id}/history`);
   }
 
   return (
@@ -37,6 +37,7 @@ const UserServer = () => {
             <th>Username</th>
             <th>Email</th>
             <th>Phone number</th>
+            <th>Status</th>
             <th>Purchase History</th>
           </tr>
         </thead>
@@ -47,10 +48,11 @@ const UserServer = () => {
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td>{user.phone}</td>
+              <td>{user.active ? 'Active' : 'Inactive'}</td>
               <td>
                 <Button
                   className='action-button'
-                  onClick={() => displayHistory(user._id, user.bought)}
+                  onClick={() => displayHistory(user._id)}
                 >
                   Check
                 </Button>
@@ -59,10 +61,10 @@ const UserServer = () => {
           ))}
         </tbody>
       </table>
+      <Button className="back-button" onClick={() => navigate('/admin')}>Back</Button>
       <Button className="logoff-button" onClick={() => navigate('/login')}>
         Log Off
       </Button>
-      <Button className="back-button" onClick={() => navigate('/admin')}>Back</Button>
     </div>
   );
 

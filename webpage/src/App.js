@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './Components/CartContext';
+import { UserProvider } from './Components/UserContext';
 import NavBar from './Components/Navbar';
 import ProductList from './Components/ProductList';
 import CartDisplay from './Components/CartDisplay';
 import Footer from './Components/Footer';
+import UserLogin from './Components/UserLogin';
+import UserHomePage from './Components/UserHomePage';
 import Login from './Admin/Login';
 import Admin from './Admin/Admin';
 import ProdServer from './Admin/ProdServer';
@@ -36,26 +39,30 @@ function App() {
   }
 
   return (
-    <CartProvider>
-      <Router>
-        <div className="App">
-          <Routes>
-            <Route path="/" element={<>
-              <NavBar />
-              <ProductList products={ products } fetchProducts={ fetchProducts }/>
-              <CartDisplay products={ products } fetchProducts={ fetchProducts }/>
-              <Footer />
-            </>} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/product" element={<ProdServer />} />
-            <Route path="/admin/product/stats" element={<Stat />} />
-            <Route path="/admin/user" element={<UserServer />} />
-            <Route path="/admin/user/:id/history" element={<UserHistory />}/>
-          </Routes>
-        </div>
-      </Router>
-    </CartProvider>
+    <UserProvider>
+      <CartProvider>
+        <Router>
+          <div className="App">
+            <Routes>
+              <Route path="/" element={<>
+                <NavBar />
+                <ProductList products={ products } fetchProducts={ fetchProducts }/>
+                <CartDisplay products={ products } fetchProducts={ fetchProducts }/>
+                <Footer />
+              </>} />
+              <Route path="/user/login" element={<UserLogin />} />
+              <Route path="/user/:id" element={<UserHomePage products={ products }/>}/>
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/product" element={<ProdServer />} />
+              <Route path="/admin/product/stats" element={<Stat />} />
+              <Route path="/admin/user" element={<UserServer />} />
+              <Route path="/admin/user/:id/history" element={<UserHistory />}/>
+            </Routes>
+          </div>
+        </Router>
+      </CartProvider>
+    </UserProvider>
   );
 }
 

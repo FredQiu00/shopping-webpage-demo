@@ -1,0 +1,116 @@
+/* UserHomePage.css */
+
+.home-page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.user-homepage {
+  background: #f4f4f4;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.homepage-title {
+  font-size: 2.5em;
+  color: #4B0082; /* This would be a deep indigo color. */
+  text-align: center;
+  padding: 20px;
+  margin: 20px;
+  border: 2px solid #4B0082;
+  border-radius: 10px;
+  background-color: #E6E6FA; /* This would be a lavender color. */
+}
+
+
+.user-homepage p {
+  color: #666;
+  text-align: right;
+  padding-right: 20px;
+}
+
+.user-homepage .buttons-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.history-button {
+  background-color: white !important;
+  color: #008CBA !important;
+  border: 2px solid #008CBA !important;
+}
+
+.history-button:hover {
+  background-color: #008CBA !important;
+  color: white !important;
+}
+
+.change-info {
+  margin-top: 20px;
+}
+
+.purchase-history {
+  background: #f9f9f9;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+.purchase-history h3 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.no-history {
+  text-align: center !important;
+  font-weight: bold;
+  flex-basis: 100%;
+}
+
+.purchase-session {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc !important;
+  padding-bottom: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+.purchase-session-container:last-child {
+  border-bottom: none; /* removing the border-bottom from the last session */
+}
+
+
+.summary {
+  font-weight: bold;
+  flex-basis: 100%;
+  text-align: right;
+}
+
+.purchased-item {
+  flex-basis: calc(30% / 3 - 10px);
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.purchased-item:last-child {
+  margin-right: 0;
+}
+
+.purchased-item img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media screen and (max-width: 768px) {
+  .purchased-item {
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+}

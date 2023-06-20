@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { CartContext } from './CartContext';
-import { updateQuantity } from './CartDisplay';
+import { UserContext } from './UserContext';
+import { updateQuantity, updatePurchaseHistory } from './CartDisplay';
 import './Product.css';
 
 const ProductCard = ({ product, fetchProducts }) => {
   const { addToCart } = useContext(CartContext);
+  const { user } = useContext(UserContext);
 
   const oneTimePurchase = async () => {
     try {
+      // Update prod data
       const updatedQuantity = product.quantity - 1;
       if (updatedQuantity >= 0) {
         const response = await fetch('http://localhost:8000/api/products', {
@@ -28,6 +31,10 @@ const ProductCard = ({ product, fetchProducts }) => {
         await Promise.all(updatedProducts.map((prod) => updateQuantity(prod, prod.quantity, prod.sold, prod.record)));
         alert(`Checkout completed. Total price: $${product.price}`);
         fetchProducts();
+
+        // Update User data
+        let updatedHistory = { [product.prod_name]: 1 };
+        await updatePurchaseHistory(user, [[updatedHistory]]);
       }
     } catch (err) {
       alert('An error occurred during checkout. Please try again.');
@@ -37,7 +44,7 @@ const ProductCard = ({ product, fetchProducts }) => {
   return (
     <Card className="card">
       <Card.Body className="container">
-        <img src={`${process.env.PUBLIC_URL}/images/${product._id}.jpg`} alt={product.prod_name} className="product-image" />
+        <img src={`${process.env.PUBLIC_URL}/images/${product.prod_name}.jpg`} alt={product.prod_name} className="product-image" />
         <Card.Title>{product.prod_name}</Card.Title>
         <Card.Subtitle className="mb-2 text-muted">${product.price}</Card.Subtitle>
         <Card.Text>{product.description}</Card.Text>
