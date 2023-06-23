@@ -304,6 +304,35 @@ app.put('/api/users/history/:id', async (req, res) => {
   }
 });
 
+// Search API
+app.get('/api/admin/search', async (req, res) => {
+  let searchField = req.query.field;
+  let searchValue = req.query.value;
+  let searchCategory = req.query.category;
+  let query = {};
+  if (searchField === 'id') {
+    query['_id'] = new ObjectId(searchValue);
+  } else {
+    query[searchField] = searchValue;
+  }
+
+  try {
+    let targetCollection;
+    if (searchCategory === 'user') {
+      targetCollection = usersCollectionName;
+    } else {
+      targetCollection = productsCollectionName;
+    }
+    const collection = client.db(databaseName).collection(targetCollection);
+    const target = await collection.find(query).toArray();
+    if (target.password) {
+      delete target.password;
+    }
+    res.status(200).json(target);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch target info.'});
+  }
+});
 
 app.listen(8000, () => {
   console.log('Server started on port 8000');
