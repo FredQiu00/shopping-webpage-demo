@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import ModifyProduct from './ModifyProduct';
 import './ServerManage.css';
+import SearchBar from './SearchBar';
+import ProductInfoTable from './ProductInfoTable';
 
 const ProdServer = () => {
   const navigate = useNavigate();
@@ -101,43 +103,8 @@ const ProdServer = () => {
   return (
     <div className="admin-container">
       <h2 className="admin-heading">Product List</h2>
-      <table className="info-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Product Name</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allProducts.map((product) => (
-            <tr key={product._id}>
-              <td>{product._id}</td>
-              <td>{product.prod_name}</td>
-              <td>{product.description}</td>
-              <td>${product.price}</td>
-              <td>{product.quantity}</td>
-              <td>
-                <Button
-                  className="action-button change"
-                  onClick={() => setModifyItem(product._id)}
-                >
-                  Change Context
-                </Button>
-                <Button
-                  className="action-button delete"
-                  onClick={() => handleDelete(product._id)}
-                >
-                  Delete Item
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <SearchBar category="product" setModifyItem={setModifyItem} handleDelete={handleDelete} />
+      <ProductInfoTable allProducts={allProducts} setModifyItem={setModifyItem} handleDelete={handleDelete} />
       <Button className='back-button' onClick={() => navigate('/admin')}>
         Back
       </Button>
