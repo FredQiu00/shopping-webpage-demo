@@ -2,14 +2,18 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const saltRounds = 10; // Change this to increase or decrease the complexity of hash
+require('dotenv').config();
 
 const { MongoClient, ObjectId, ServerApiVersion } = require('mongodb');
+const stripe = require('stripe')(process.env.REACT_APP_STRIPE_SECRET_API_KEY);
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
-const uri = "mongodb+srv://tgaofred:Fred000511@products.6zn77ve.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.REACT_APP_MONGODB_URI;
 const databaseName = 'prodList';
 const productsCollectionName = 'prod';
 const usersCollectionName = 'users';
@@ -333,6 +337,45 @@ app.get('/api/admin/search', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch target info.'});
   }
 });
+
+// Payment
+app.post('/api/payment', async (req, res) => {
+  const { amount, name, description, paymentMethod, email, phone, zipCode } = req.body;
+
+  try {
+    // Try to find the customer
+    const customers = await stripe.customers.list({ email });
+    let customer;
+
+    if (customers.data.length) {
+      // If the customer exists, select it
+      customer = customers.data[0];
+    } else {
+      // If not, create the customer
+      customer = await stripe.customers.create({
+        name: name,
+        email,
+        phone,
+        address: { postal_code: zipCode },
+      });
+    }
+
+    const payment = await stripe.paymentIntents.create({
+      amount,
+      currency: 'usd',
+      description: description,
+      customer: customer.id,
+      payment_method: paymentMethod.id,
+      confirm: true
+    });
+
+    res.json({ orderId: payment.id, message: 'Payment successful', success: true });
+  } catch (err) {
+    console.log(err);
+    res.json({ message: 'Payment failed', success: false });
+  }
+});
+
 
 app.listen(8000, () => {
   console.log('Server started on port 8000');
