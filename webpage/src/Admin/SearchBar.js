@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import UserInfoTable from './UserInfoTable';
-import './SearchBar.css';
 import ProductInfoTable from './ProductInfoTable';
+import './SearchBar.css';
 
-const SearchBar = ({ category, setModifyItem, handleDelete}) => {
+const SearchBar = ({ category, allProducts, setModifyItem, handleDelete }) => {
 
   const [selected, setSelected] = useState(null);
   const [searchField, setSearchField] = useState('id');
   const [searchValue, setSearchValue] = useState('');
   const [loadTable, setLoadTable] = useState(false);
 
-  const handleSearch = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response =
         await fetch(`http://localhost:8000/api/admin/search?category=${category}&field=${searchField}&value=${searchValue}`, {
@@ -21,14 +21,25 @@ const SearchBar = ({ category, setModifyItem, handleDelete}) => {
         }
         const userData = await response.json();
         if (userData && userData.length > 0) {
-            setSelected(userData[0]);
-            setLoadTable(true);
+          setSelected(userData[0]);
+          setLoadTable(true);
         } else {
-            alert('No Info found');
+          setSearchValue('');
         }
     } catch (err) {
       alert(`Fail to fetch info: ${err}`);
     }
+  }, [category, searchField, searchValue]);
+
+  useEffect(() => {
+    if (selected && !allProducts.find(product => product._id === selected._id)) {
+      setSelected(null);
+      setLoadTable(false);
+    }
+  }, [allProducts, selected, fetchData]);
+
+  const handleSearch = async () => {
+    await fetchData();
   };
 
   const handleSelectChange = (e) => {
@@ -37,6 +48,13 @@ const SearchBar = ({ category, setModifyItem, handleDelete}) => {
     setSearchValue('');
     setLoadTable(false);
   }
+
+  const handleDeleteItem = async (itemId) => {
+    if (selected && selected._id === itemId) {
+      setSelected(null);
+    }
+    handleDelete(itemId);
+};
 
   return (
     <div className='SearchBar-container'>
@@ -60,9 +78,9 @@ const SearchBar = ({ category, setModifyItem, handleDelete}) => {
         <button onClick={handleSearch}>Search</button>
       </div>
       {selected && loadTable && (
-        category === "user"
-          ? <UserInfoTable allUsers={[selected]}/>
-          : <ProductInfoTable allProducts={[selected]} setModifyItem={setModifyItem} handleDelete={handleDelete}/>
+            category === "user"
+              ? <UserInfoTable allUsers={[selected]}/>
+              : <ProductInfoTable allProducts={[selected]} setModifyItem={setModifyItem} handleDelete={handleDeleteItem}/>
       )}
     </div>
   );

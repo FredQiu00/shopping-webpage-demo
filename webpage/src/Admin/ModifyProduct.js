@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Form } from 'react-bootstrap';
 import styles from './ModifyProduct.module.css';
 
-const ModifyProduct = ({ show, handleClose, handleAction, actionLabel, initialData}) => {
+const ModifyProduct = ({ show, handleClose, handleAction, actionLabel, initialData }) => {
   const [prod_name, setProdName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);

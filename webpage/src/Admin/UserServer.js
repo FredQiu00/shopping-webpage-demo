@@ -28,7 +28,7 @@ const UserServer = () => {
   return (
     <div className="admin-container">
       <h2 className="admin-heading">User List</h2>
-      <SearchBar category="user"/>
+      <SearchBar category="user" allProducts={allUsers}/>
       <UserInfoTable allUsers={allUsers} />
       <Button className="back-button" onClick={() => navigate('/admin')}>Back</Button>
       <Button className="logoff-button" onClick={() => navigate('/login')}>

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { CartContext } from './CartContext';
 import { UserContext } from './UserContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+import CheckoutBox from '../Pay/CheckoutBox';
 import './CartDisplay.css';
 
 export const updateQuantity = (product, quantity, sold, updatedRecord) => {
@@ -20,6 +21,7 @@ export const updateQuantity = (product, quantity, sold, updatedRecord) => {
 }
 
 export const updatePurchaseHistory = (user, updatedHistory) => {
+  if (!user) return;
   const updatePromise = fetch(`http://localhost:8000/api/users/history/${user._id}`, {
     method: 'PUT',
     body: JSON.stringify({
@@ -82,7 +84,6 @@ const CartDisplay = ({ products, fetchProducts }) => {
         }
         if (updatePromises.length > 0) {
           await Promise.all(updatePromises)
-          alert(`Checkout completed. Total price: $${totalPrice}`);
           clearCart();
           fetchProducts();
           let updatedHistory = cart.map(item => ({ [item.name]: item.quantity }));
@@ -139,9 +140,9 @@ const CartDisplay = ({ products, fetchProducts }) => {
         </>
       )}
       <Row className="cart-buttons">
-        <Button variant="primary" className="checkout-button" onClick={handleCheckout}>Checkout</Button>
-        <Button variant="warning" className="clear-cart-button" onClick={handleClearCart}>Clear</Button>
-        <Button variant="secondary" className="close-cart-button" onClick={handleCloseCart}>Close</Button>
+        <CheckoutBox user={ user } totalPrice={ totalPrice * 100 } handleCheckout={ handleCheckout }/>
+        <Button variant="warning" className="clear-cart-button" onClick={ handleClearCart }>Clear</Button>
+        <Button variant="secondary" className="close-cart-button" onClick={ handleCloseCart }>Close</Button>
       </Row>
     </Container>
   );

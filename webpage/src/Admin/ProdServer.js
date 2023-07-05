@@ -103,7 +103,12 @@ const ProdServer = () => {
   return (
     <div className="admin-container">
       <h2 className="admin-heading">Product List</h2>
-      <SearchBar category="product" setModifyItem={setModifyItem} handleDelete={handleDelete} />
+      <SearchBar
+        category="product"
+        allProducts={allProducts}
+        setModifyItem={setModifyItem}
+        handleDelete={handleDelete}
+      />
       <ProductInfoTable allProducts={allProducts} setModifyItem={setModifyItem} handleDelete={handleDelete} />
       <Button className='back-button' onClick={() => navigate('/admin')}>
         Back
