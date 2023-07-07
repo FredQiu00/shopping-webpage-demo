@@ -340,7 +340,7 @@ app.get('/api/admin/search', async (req, res) => {
 
 // Payment
 app.post('/api/payment', async (req, res) => {
-  const { amount, name, description, paymentMethod, email, phone, zipCode } = req.body;
+  const { amount, name, currency, description, paymentMethod, email, phone, zipCode } = req.body;
 
   try {
     // Try to find the customer
@@ -362,14 +362,29 @@ app.post('/api/payment', async (req, res) => {
 
     const payment = await stripe.paymentIntents.create({
       amount,
-      currency: 'usd',
+      currency: currency,
       description: description,
       customer: customer.id,
       payment_method: paymentMethod.id,
       confirm: true
     });
 
-    res.json({ orderId: payment.id, message: 'Payment successful', success: true });
+    if (payment.status === 'succeeded') {
+      res.json({
+        orderId: payment.id,
+        message: 'Payment successful',
+        success: true,
+      });
+    } else if (payment.status === 'requires_action') {
+      res.json({
+        client_secret: payment.client_secret, // The client secret is used to continue the payment on the client side
+        pm_id: paymentMethod.id,
+        requires_action: true
+      });
+    } else {
+      // The payment failed due to other unpredicted verification needed.
+      res.json({ message: 'Additional verification required', success: false});
+    }
   } catch (err) {
     console.log(err);
     res.json({ message: 'Payment failed', success: false });
