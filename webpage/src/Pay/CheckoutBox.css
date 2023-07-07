@@ -1,67 +1,99 @@
-/* CheckoutBox.css */
-
+/* Whole page/container */
 .payment-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2em;
-  background: #f5f5f5;
+  padding: 20px;
+  background: #ffffff;
   border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
 }
 
-.payment-form {
-  width: 100%;
-  max-width: 500px;
-}
-
-.payment-form-button {
-  font-size: 1em;
-  padding: 0.5em 1em;
+/* Form controls styling */
+.payment-form .form-control {
   border-radius: 5px;
-  margin-top: 1em;
-  transition: all 0.3s ease;
+  border: 1px solid #ced4da;
+  box-shadow: none;
+}
+
+.payment-form .form-control:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 0.2rem rgba(26,115,232,.25);
 }
 
 .payment-form-button {
-  width: 100%;
-  background-color: white !important;
-  color: orangered !important;
-  font-weight: bold !important;
-  border: 2px solid orangered !important;
-  transition: all 0.3s ease !important;
-}
-
-.payment-form-button:hover {
-  background-color: orangered !important;
-  color: white !important;
+  background-color: #3f3f3f !important;
   border: none !important;
+  border-radius: 5px;
+  padding: 10px 0;
+  color: #ffffff;
+  font-weight: bold !important;
+  transition: background-color .3s ease;
+  width: 100%; /* Full width */
+}
+
+.payment-form-button:hover,
+.payment-form-button:focus {
+  background-color: #2b2b2b !important;
+  border: none !important;
+  outline: none;
 }
 
 
+/* Close button styling */
 .close-button {
-  background: #dc3545;
-  color: white;
+  background-color: #f8f9fa;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  color: #495057;
+  font-size: 1rem;
+  transition: background-color .3s ease;
 }
 
-.close-button:hover {
-  background: #c82333;
+.close-button:hover,
+.close-button:focus {
+  background-color: #e2e6ea;
+  outline: none;
 }
 
+/* Modal header styling */
+.payment-title {
+  font-size: 1.5rem;
+  color: #1a73e8;
+  font-weight: 500;
+}
+
+/* Stripe Element styling */
 .StripeElement {
   display: block;
-  margin: 1em 0;
-  max-width: 500px;
+  margin: 10px 0 20px 0;
   padding: 10px 14px;
-  font-size: 1em;
-  font-family: 'Source Code Pro', monospace;
-  box-shadow: rgba(50, 50, 93, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.08) 0px 1px 0px;
-  border-radius: 4px;
-  background: white;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
 }
 
 .StripeElement--focus {
-  outline: none;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 1px 3px, rgba(0, 0, 0, 0.08) 0px 1px 0px;
-  transition: box-shadow 150ms ease;
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.name-field,
+.location-field {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.half-width-input {
+  flex: 0 0 48%;
 }
