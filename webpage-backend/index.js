@@ -338,56 +338,84 @@ app.get('/api/admin/search', async (req, res) => {
   }
 });
 
-// Payment
-app.post('/api/payment', async (req, res) => {
-  const { amount, name, currency, description, paymentMethod, email, phone, zipCode } = req.body;
+// // Payment
+// app.post('/api/payment', async (req, res) => {
+//   const { amount, name, currency, description, paymentMethod, email, phone, zipCode } = req.body;
 
+//   try {
+//     // Try to find the customer
+//     const customers = await stripe.customers.search({ query: `email:'${email}'` });
+//     let customer;
+
+//     if (customers.data.length) {
+//       // If the customer exists, select it
+//       customer = customers.data[0];
+//       console.log(customer);
+//     } else {
+//       // If not, create the customer
+//       customer = await stripe.customers.create({
+//         name: name,
+//         email,
+//         phone,
+//         address: { postal_code: zipCode },
+//       });
+//     }
+
+//     const payment = await stripe.paymentIntents.create({
+//       amount,
+//       currency: currency,
+//       description: description,
+//       customer: customer.id,
+//       payment_method: paymentMethod.id,
+//       confirm: true
+//     });
+
+//     if (payment.status === 'succeeded') {
+//       res.json({
+//         orderId: payment.id,
+//         message: 'Payment successful',
+//         success: true,
+//       });
+//     } else if (payment.status === 'requires_action') {
+//       res.json({
+//         client_secret: payment.client_secret, // The client secret is used to continue the payment on the client side
+//         pm_id: paymentMethod.id,
+//         requires_action: true
+//       });
+//     } else {
+//       // The payment failed due to other unpredicted verification needed.
+//       res.json({ message: 'Additional verification required', success: false});
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     res.json({ message: 'Payment failed', success: false });
+//   }
+// });
+
+const getItem = (item) => {
+  return item;
+}
+
+app.post('/api/payment-intent', async(req, res) => {
+  const { currency, amount, currCustomer } = req.body;
   try {
-    // Try to find the customer
-    const customers = await stripe.customers.list({ email });
-    let customer;
-
-    if (customers.data.length) {
-      // If the customer exists, select it
-      customer = customers.data[0];
-    } else {
-      // If not, create the customer
-      customer = await stripe.customers.create({
-        name: name,
-        email,
-        phone,
-        address: { postal_code: zipCode },
-      });
-    }
-
-    const payment = await stripe.paymentIntents.create({
-      amount,
-      currency: currency,
-      description: description,
-      customer: customer.id,
-      payment_method: paymentMethod.id,
-      confirm: true
+    const customer = await stripe.customers.create(currCustomer);
+    console.log(customer.id);
+    const paymentIntent = await stripe.paymentIntents.create({
+      currency: getItem(currency),
+      amount: getItem(amount),
+      customer: getItem(customer.id),
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
-
-    if (payment.status === 'succeeded') {
-      res.json({
-        orderId: payment.id,
-        message: 'Payment successful',
-        success: true,
-      });
-    } else if (payment.status === 'requires_action') {
-      res.json({
-        client_secret: payment.client_secret, // The client secret is used to continue the payment on the client side
-        pm_id: paymentMethod.id,
-        requires_action: true
-      });
-    } else {
-      // The payment failed due to other unpredicted verification needed.
-      res.json({ message: 'Additional verification required', success: false});
-    }
-  } catch (err) {
-    console.log(err);
-    res.json({ message: 'Payment failed', success: false });
+    res.send({ clientSecret: paymentIntent.client_secret });
+  } catch(err) {
+    return res.status(400).send({
+      error: {
+        message: err.message,
+      },
+    });
   }
 });
 
