@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { CartContext } from './CartContext';
 import { UserContext } from './UserContext';
 import { Button, Container, Row, Col } from 'react-bootstrap';
-import CheckoutBox from '../Pay/CheckoutBox';
+import Payment from './Payment';
 import './CartDisplay.css';
 
 export const updateQuantity = (product, quantity, sold, updatedRecord) => {
@@ -45,10 +45,6 @@ const CartDisplay = ({ products, fetchProducts }) => {
 
   const { user } = useContext(UserContext);
 
-  if (!isCartVisible) {
-    return null;
-  }
-
   const handleClearCart = () => {
     clearCart();
   }
@@ -59,7 +55,7 @@ const CartDisplay = ({ products, fetchProducts }) => {
 
   const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (paymentData) => {
     if (cart.length > 0) {
       try {
         const updatePromises = [];
@@ -140,7 +136,10 @@ const CartDisplay = ({ products, fetchProducts }) => {
         </>
       )}
       <Row className="cart-buttons">
-        <CheckoutBox user={ user } totalPrice={ totalPrice * 100 } handleCheckout={ handleCheckout }/>
+        <Payment
+            handleCheckout={handleCheckout}
+            totalPrice={parseInt(totalPrice * 100)}
+        />
         <Button variant="warning" className="clear-cart-button" onClick={ handleClearCart }>Clear</Button>
         <Button variant="secondary" className="close-cart-button" onClick={ handleCloseCart }>Close</Button>
       </Row>
